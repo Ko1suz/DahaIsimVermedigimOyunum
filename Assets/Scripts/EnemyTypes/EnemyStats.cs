@@ -48,7 +48,7 @@ public class EnemyStats : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            if (collision.gameObject.GetComponent<Player>().dashStatus)
+            if (Player.dashStatus)
             {
                 SetEnemyHealth(PlayerStatsScript.instance.DashAttackDamage);
             }

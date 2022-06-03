@@ -32,7 +32,7 @@ public class Asteroid : MonoBehaviour
     Asteroid asteroid;
     private int RandomSpriteDegeri;
     // private 
-
+    
 
     void Awake()
     {
@@ -87,12 +87,12 @@ public class Asteroid : MonoBehaviour
             gm.DestroyAsteroid(this);
         }
     }
-
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
-            if (collision.gameObject.GetComponent<Player>().dashStatus)
+            if (Player.dashStatus)
             {
                 SetAsteroidHealth(PlayerStatsScript.instance.DashAttackDamage);
                 PlayerStatsScript.instance.SetPlayerEnergy(5);
@@ -121,11 +121,13 @@ public class Asteroid : MonoBehaviour
 
             CreateSplit();
             CreateSplit();
+            
         }
 
         gm.DestroyAsteroid(this);
+        
     }
-
+    
     public void CreateSplit()
     {
         Vector2 position = this.transform.position;

@@ -36,7 +36,15 @@ public class Enemy_AI : EnemyStats
     }
 
     public void FindTarget(){
-        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        if (target = null)
+        {
+           return;
+        }
+        else
+        {
+            target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        }
+        
     } 
 
     void Update()

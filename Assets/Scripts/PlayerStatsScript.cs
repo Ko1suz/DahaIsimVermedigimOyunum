@@ -8,19 +8,25 @@ public class PlayerStatsScript : MonoBehaviour
     public float thrustSpeed = 1f; 
     public float turnSpeed = 1f;
     public int maxHealth = 100;
-    public int maxEnergy = 150;
+    public float maxEnergy = 150;
     public int attackDamage = 10;
     public int DashAttackDamage = 100;
     private int _currnetHealth;
-    private int _currnetEnergy;
+    private float _currnetEnergy;
+    public EnergyUI energyUI;
+    
 
+    void Start()
+    {
+        
+    }
     public int currnetHealth
     {
         get{ return _currnetHealth;}
         set{_currnetHealth = Mathf.Clamp(value,0,maxHealth);}
     }
 
-    public int currnetEnergy
+    public float currnetEnergy
     {
         get { return _currnetEnergy; }
         set { _currnetEnergy = Mathf.Clamp(value, 0, maxEnergy); }
@@ -35,10 +41,18 @@ public class PlayerStatsScript : MonoBehaviour
             //  currnetHealth =maxHealth;
         }
 
-    public void SetPlayerEnergy(int value)
+    public void SetPlayerEnergy(float value)
     {
         PlayerStatsScript.instance.currnetEnergy += value;
+        energyUI.SetEnergyUI(PlayerStatsScript.instance.currnetEnergy);
         //Debug.LogWarning(value + " Kadar enerji kaybettin");
+
     }
+
+    
+
+   
+
+
 
 }

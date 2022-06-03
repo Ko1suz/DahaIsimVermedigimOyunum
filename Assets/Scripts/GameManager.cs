@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverUIRef;
     public static GameObject scoreUI;
     public GameObject scoreUIRef;
+    
 
     void Awake()
     {
@@ -53,7 +54,10 @@ public class GameManager : MonoBehaviour
     public static void KillEnemy(EnemyStats enemy){
         ExplosionEffect(enemy.transform);
         Destroy(enemy.gameObject);
-        PlayerStatsScript.instance.SetPlayerEnergy(25);
+        if (Player.dashStatus)
+        {
+            PlayerStatsScript.instance.SetPlayerEnergy(25);
+        }
     }
     public void DestroyAsteroid(Asteroid asteroid){
         AsteroidExplosionEffect(asteroid.transform,asteroid.size);

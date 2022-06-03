@@ -66,7 +66,7 @@ public class EnemySpawner2 : MonoBehaviour
         {
             if (state != SpawnState.SPAWNING)
             {
-                Debug.LogError("BURAyA GELDİM");
+                
                 StartCoroutine(SpawnWave(waves[nextWave]));
             }
             

@@ -14,7 +14,7 @@ public class EnergyyUI : MonoBehaviour
 
     void Update()
     {
-        energyText.text = "Energy : " + PlayerStatsScript.instance.currnetEnergy.ToString();
+        energyText.text = "Energy : " + ((int)(PlayerStatsScript.instance.currnetEnergy)).ToString();
     }
 
 }
