@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
 
     public HealthUI healthUI;
     public EnergyUI energyUI;
+    public LittleEnergyBar littleEnergyBar;
 
 
 
@@ -28,7 +29,7 @@ public class Player : MonoBehaviour
     public ParticleSystem brustEffect;
     public ParticleSystem classicBrustEffect;
 
-   
+
 
 
 
@@ -141,7 +142,7 @@ public class Player : MonoBehaviour
             {
                 direction = 0;
                 dashTime = startDashTime;
-                rb.velocity = Vector2.zero;
+                rb.velocity = rb.velocity / 10;
             }
             else
             {
@@ -154,7 +155,7 @@ public class Player : MonoBehaviour
 
         }
 
-        
+
 
         IEnumerator DashTargetingTime()
         {
@@ -170,7 +171,7 @@ public class Player : MonoBehaviour
             arrow2.SetActive(false);
         }
 
-        
+
 
 
 
@@ -194,7 +195,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.Space))
         {
-            Shoot();
+            // Shoot();
         }
 
     }
@@ -208,28 +209,85 @@ public class Player : MonoBehaviour
 
         transform.up = direction;
     }
+    bool boostWait = false;
+    IEnumerator EnergyRestoreTime()
+    {
+        yield return new WaitForSeconds(PlayerStatsScript.instance.burstRestoreTime);
+        boostWait = false;
+    }
+
+    public float countDown =10;
+    public void brustCountDown()
+    {
+        
+        Debug.LogError("brustCountDown if bloguna gırdım");
+        
+        countDown += Time.deltaTime * 1;
+        Debug.LogWarning("  kalan süre  "+countDown);
+        littleEnergyBar.SetRefillEnergyUI(countDown);
+        // if (countDown<=0 && boostWait)
+        // {
+        //     countDown = 10;
+        //     littleEnergyBar.SetRefillEnergyUI(countDown);
+        // }
+    }
 
     void FixedUpdate()
     {
+        if (PlayerStatsScript.instance.currnetEnergy <= 0)
+        {
+            boostWait = true;
+            StartCoroutine(EnergyRestoreTime());
+        }
+        if (boostWait)
+        {
+            brustCountDown();
+        }
+        else
+        {
+            countDown = 0;
+            littleEnergyBar.SetRefillEnergyUI(countDown);
+        }
+        
+
         if (boosting)
         {
-            rb.AddForce(this.gameObject.transform.up * playerStats.thrustSpeed * 5);
-            // brustEffect.Play();
-            classicBrustEffect.startSize = 1.5f;
-            PlayerStatsScript.instance.SetPlayerEnergy(-1*Time.deltaTime*3);
+            if (!boostWait)
+            {
+                rb.AddForce(this.gameObject.transform.up * playerStats.thrustSpeed * 5);
+                // brustEffect.Play();
+                classicBrustEffect.startSize = 1.8f;
+                PlayerStatsScript.instance.SetPlayerEnergy(-1 * Time.deltaTime * 10);
+            }
+            else
+            {
+                rb.AddForce(this.gameObject.transform.up * playerStats.thrustSpeed * 0);
+                // brustEffect.Play();
+                classicBrustEffect.startSize = .3f;
+                PlayerStatsScript.instance.SetPlayerEnergy(+1 * Time.deltaTime);
+
+            }
+
+            // else
+            // {
+            //     rb.AddForce(this.gameObject.transform.up * playerStats.thrustSpeed * 5);
+            //     // brustEffect.Play();
+            //     classicBrustEffect.startSize = 1.5f;
+            //     PlayerStatsScript.instance.SetPlayerEnergy(-1 * Time.deltaTime * 3);
+            // }
         }
         else if (thrusting)
         {
             rb.AddForce(this.gameObject.transform.up * playerStats.thrustSpeed);
             // brustEffect.Stop();
             classicBrustEffect.startSize = 0.8f;
-            PlayerStatsScript.instance.SetPlayerEnergy(+1*Time.deltaTime);
+            PlayerStatsScript.instance.SetPlayerEnergy(+1 * Time.deltaTime);
         }
         else
         {
             classicBrustEffect.startSize = 0.8f;
-            PlayerStatsScript.instance.SetPlayerEnergy(+1*Time.deltaTime);
-        //    brustEffect.Stop();
+            PlayerStatsScript.instance.SetPlayerEnergy(+1 * Time.deltaTime);
+            //    brustEffect.Stop();
         }
 
         //if (turnDireaction != 0f)
@@ -237,17 +295,17 @@ public class Player : MonoBehaviour
         //    rb.AddTorque(turnDireaction*playerStats.turnSpeed);
         //}
     }
-    public void Shoot()
-    {
-        Bullet bullet = Instantiate(this.bulletPrefab, firePoint.transform.position, this.transform.rotation);
-        bullet.Project(this.gameObject.transform.up);
-    }
+    // public void Shoot()
+    // {
+    //     Bullet bullet = Instantiate(this.bulletPrefab, firePoint.transform.position, this.transform.rotation);
+    //     bullet.Project(this.gameObject.transform.up);
+    // }
 
     public void SetPlayerHealth(int damage)
     {
         PlayerStatsScript.instance.currnetHealth -= damage;
         healthUI.SetHealthUI(PlayerStatsScript.instance.currnetHealth);
-       
+
         Debug.LogWarning(damage + " Kadar hasar yedin");
 
         if (PlayerStatsScript.instance.currnetHealth <= 0)

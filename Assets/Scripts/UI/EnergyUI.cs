@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class EnergyUI : MonoBehaviour
 {
     public Slider slider;
@@ -10,11 +11,6 @@ public class EnergyUI : MonoBehaviour
     public Gradient gradient;
     public Image fill;
     
-
-    void Start()
-    {
-       
-    }
 
     void Update()
     {
@@ -33,4 +29,6 @@ public class EnergyUI : MonoBehaviour
         slider.value = energy;
         fill.color = gradient.Evaluate(slider.normalizedValue);
     }
+
+    
 }

@@ -31,6 +31,8 @@ public class Asteroid : MonoBehaviour
     GameManager gm;
     Asteroid asteroid;
     private int RandomSpriteDegeri;
+    public Transform playerTransform;
+    float distance;
     // private 
     
 
@@ -45,6 +47,7 @@ public class Asteroid : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         _currnetHealth = asteroidMaxHealth;
         int spriteTutucu = Random.Range(0,4);
         RandomSpriteDegeri = spriteTutucu;
@@ -55,6 +58,15 @@ public class Asteroid : MonoBehaviour
         // new Vector3(this.size,this.size,this.size);
 
         rb.mass = this.size*5;
+    }
+
+    void Update()
+    {
+        distance = Vector3.Distance(this.gameObject.transform.position,playerTransform.gameObject.transform.position);
+        if (distance>120)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public void SetTrajectory(Vector2 direction){
