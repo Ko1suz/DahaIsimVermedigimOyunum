@@ -74,7 +74,6 @@ public class EnemySpawner2 : MonoBehaviour
         else
         {
             waveCountDown -= Time.deltaTime;
-            Debug.Log("NOBİTCHES?");
         }
     }
 

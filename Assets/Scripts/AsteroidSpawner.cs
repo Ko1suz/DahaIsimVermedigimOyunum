@@ -9,11 +9,13 @@ public class AsteroidSpawner : MonoBehaviour
     public float spawnRate = 2.0f;
     public float spawnAmount = 1.0f;
     public float spawnDistanceRadius = 15.0f;
+    private Transform spawnerTransform;
    
 
     // Start is called before the first frame update
     void Start()
     {
+        spawnerTransform = GetComponent<Transform>();
         InvokeRepeating(nameof(SpawnAstreoid),this.spawnRate,this.spawnRate/6);
     }
 
@@ -35,7 +37,7 @@ public class AsteroidSpawner : MonoBehaviour
         }
     }
     private void Update() {
-       
+    //    spawnerTransform.transform.position = Camera.main.transform.position;
     }
     void OnDrawGizmos()
     {

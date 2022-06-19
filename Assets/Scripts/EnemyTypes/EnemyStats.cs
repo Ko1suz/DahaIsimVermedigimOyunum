@@ -34,15 +34,15 @@ public class EnemyStats : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.tag == "Bullet")
-        {
-            SetEnemyHealth(PlayerStatsScript.instance.attackDamage);
-        }
+    // void OnCollisionEnter2D(Collision2D other)
+    // {
+    //     if (other.gameObject.tag == "Bullet")
+    //     {
+    //         SetEnemyHealth(PlayerStatsScript.instance.attackDamage);
+    //     }
        
-        Debug.Log(currnetHealth+" Canım");
-    }
+    //     Debug.Log(currnetHealth+" Canım");
+    // }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6113309086450237259}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.64, y: -0.17, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8219085190090160467}
@@ -73,9 +73,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
+  m_SortingLayerID: 1311688227
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 5
   m_Sprite: {fileID: 21300000, guid: 4400f3e4814a82749a46292fb9247ebc, type: 3}
   m_Color: {r: 0.6509804, g: 0.6509804, b: 0.6509804, a: 1}
   m_FlipX: 0
@@ -106,7 +106,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!60 &6113309086450237258
 PolygonCollider2D:
@@ -276,18 +276,21 @@ MonoBehaviour:
   - {fileID: 21300000, guid: da26fd8bfd630364ab2f3ffd02fc869d, type: 3}
   - {fileID: 21300000, guid: fb358cb7a295573429d679f2cb5c6a61, type: 3}
   - {fileID: 21300000, guid: 0851a06b678c5ab4787ebfef419d0820, type: 3}
-  asteroidMaxHealth: 90
+  asteroidMaxHealth: 100
   size: 1
   minSize: 0.5
   maxSize: 5
   minSpeed: 10
   maxSpeed: 50
   maxLifeTime: 80
-  halfAsteroidSpeed: 3
+  halfAsteroidSpeed: 20
   asteroidDamage: 1
   asteroiDamagaReduce: 6
   ExplosionEffect: {fileID: 8219085190090160464}
   playerTransform: {fileID: 0}
+  Collectable:
+  - {fileID: 4280861841758766767, guid: 691070df35b7a2b4d956f54adf8557f9, type: 3}
+  - {fileID: 5476429927015008196, guid: 91b935a7b80153445afe34fd62f649fd, type: 3}
 --- !u!1 &8475729753926046673
 GameObject:
   m_ObjectHideFlags: 0

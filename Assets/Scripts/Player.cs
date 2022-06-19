@@ -216,20 +216,11 @@ public class Player : MonoBehaviour
         boostWait = false;
     }
 
-    public float countDown =10;
+    public float countDown =0;
     public void brustCountDown()
     {
-        
-        Debug.LogError("brustCountDown if bloguna gırdım");
-        
         countDown += Time.deltaTime * 1;
-        Debug.LogWarning("  kalan süre  "+countDown);
         littleEnergyBar.SetRefillEnergyUI(countDown);
-        // if (countDown<=0 && boostWait)
-        // {
-        //     countDown = 10;
-        //     littleEnergyBar.SetRefillEnergyUI(countDown);
-        // }
     }
 
     void FixedUpdate()
@@ -256,7 +247,7 @@ public class Player : MonoBehaviour
             {
                 rb.AddForce(this.gameObject.transform.up * playerStats.thrustSpeed * 5);
                 // brustEffect.Play();
-                classicBrustEffect.startSize = 1.8f;
+                classicBrustEffect.startSize = 2.8f;
                 PlayerStatsScript.instance.SetPlayerEnergy(-1 * Time.deltaTime * 10);
             }
             else
@@ -280,12 +271,12 @@ public class Player : MonoBehaviour
         {
             rb.AddForce(this.gameObject.transform.up * playerStats.thrustSpeed);
             // brustEffect.Stop();
-            classicBrustEffect.startSize = 0.8f;
+            classicBrustEffect.startSize = 1.5f;
             PlayerStatsScript.instance.SetPlayerEnergy(+1 * Time.deltaTime);
         }
         else
         {
-            classicBrustEffect.startSize = 0.8f;
+            classicBrustEffect.startSize = 1f;
             PlayerStatsScript.instance.SetPlayerEnergy(+1 * Time.deltaTime);
             //    brustEffect.Stop();
         }

@@ -24,7 +24,7 @@ public class Enemy_AI : EnemyStats
     {
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
-
+        target =  GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         InvokeMethods();
 
     }

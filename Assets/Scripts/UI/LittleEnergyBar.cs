@@ -7,14 +7,8 @@ public class LittleEnergyBar : MonoBehaviour
 {
 
     public Image brustRefillTimerFill;
-    public Slider slider;
+    public Slider slider;   
 
-
-
-    void Update()
-    {
-
-    }
 
     public void SetRefillEnergyUI(float energy)
     {

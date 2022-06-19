@@ -16,6 +16,7 @@ public class PlayerStatsScript : MonoBehaviour
     private float _currnetEnergy;
     public EnergyUI energyUI;
     public AmmoUI ammoUI;
+    public HealthUI healthUI;
     public float brustRefillTimer;
 
 
@@ -74,10 +75,12 @@ public class PlayerStatsScript : MonoBehaviour
         //TODO Ammo UI yapacaksın
     }
 
+    public void SetPlayerHealth(int value)
+    {
+        PlayerStatsScript.instance.currnetHealth += value;
+        healthUI.SetHealthUI(PlayerStatsScript.instance.currnetHealth);
+        //Debug.LogWarning(value + " Kadar enerji kaybettin");
 
-
-
-
-
+    }
 
 }
