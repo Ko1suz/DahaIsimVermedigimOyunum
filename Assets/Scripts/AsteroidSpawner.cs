@@ -10,6 +10,7 @@ public class AsteroidSpawner : MonoBehaviour
     public float spawnAmount = 1.0f;
     public float spawnDistanceRadius = 15.0f;
     private Transform spawnerTransform;
+    public GameManager gm;
    
 
     // Start is called before the first frame update
@@ -32,8 +33,10 @@ public class AsteroidSpawner : MonoBehaviour
         for (int i = 0; i < this.spawnAmount; i++)
         {
             Asteroid asteroid = Instantiate(this.asteroidPrefab,spawnPoint,rotation);
+            
             asteroid.size = Random.Range(asteroid.minSize, asteroid.maxSize);
             asteroid.SetTrajectory(rotation * -spawnDirection);
+            gm.asteroids.Add(asteroid.gameObject);
         }
     }
     private void Update() {

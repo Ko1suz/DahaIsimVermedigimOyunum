@@ -8,7 +8,7 @@ public class EnemyTriAngle : New_Enemy_AI
     public EnemyBullet bulletPrefab;
     public Transform firePoint;
     float targetDistance;
-    public float fireDistance =15;
+    public float fireDistance = 15;
 
     void Start()
     {
@@ -18,17 +18,19 @@ public class EnemyTriAngle : New_Enemy_AI
     }
     public void Shoot()
     {
-        if (targetDistance < fireDistance)
+        if (targetDistance <= fireDistance)
         {
             EnemyBullet bullet = Instantiate(this.bulletPrefab, firePoint.transform.position, this.transform.rotation);
             bullet.Project(this.gameObject.transform.up);
+            Debug.Log(bullet.transform.position + "    " + bullet.name + "    Fire Distance ====" + fireDistance);
         }
 
     }
-    private new void Update()
-    {
-        targetDistance = Vector3.Distance(this.gameObject.transform.position, target.gameObject.transform.position); 
-        FaceDirection();
-        Movment();  
-    }
+    // private new void Update()
+    // {
+
+    //     targetDistance = Vector3.Distance(this.gameObject.transform.position, target.gameObject.transform.position);
+    //     // Debug.Log(targetDistance);
+    //     FaceDirection();
+    // }
 }

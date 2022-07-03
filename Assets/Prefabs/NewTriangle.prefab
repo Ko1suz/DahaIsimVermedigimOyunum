@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 203e8e4d31d20b048b9e0d22030c4a9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 10
+  Speed: 2
   maxHealth: 100
   attackDamage: 10
   target: {fileID: 0}
@@ -138,7 +138,7 @@ MonoBehaviour:
   backOffFuckerPower: 3
   bulletPrefab: {fileID: 2976211978409677908, guid: 75fc6f949c66b7f4c8621574c70bade1, type: 3}
   firePoint: {fileID: 584989991}
-  fireDistance: 11
+  fireDistance: 15
 --- !u!50 &-2206160145734301987
 Rigidbody2D:
   serializedVersion: 4

@@ -19,10 +19,15 @@ public class New_Enemy_AI : EnemyStats
 
 
     protected void Update() {
-        
+        PlayerDistance();
         FaceDirection();
+        
+    }
+
+    private void FixedUpdate() {
         Movment();
     }
+
     public void FaceDirection()
     {
         if (target == null)
@@ -39,9 +44,14 @@ public class New_Enemy_AI : EnemyStats
 
     public void Movment()
     {
-        if (Vector2.Distance(transform.position, target.position) < distanceOffset)
+        if (PlayerDistance() < distanceOffset)
         {
-            rb.AddForce(this.gameObject.transform.up*-Speed);
+            rb.AddForce(this.gameObject.transform.up*-Speed/2);
+        }
+        //if Character Is FarAway I Accelerate
+        else if (PlayerDistance() >50)
+        {
+            rb.AddForce(this.gameObject.transform.up*50); 
         }
         else
         {
@@ -49,11 +59,17 @@ public class New_Enemy_AI : EnemyStats
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
+    protected void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Player")
         {
             rb.velocity = this.gameObject.transform.up * -1 * backOffFuckerPower;
         }
+    }
+
+    protected float PlayerDistance()
+    {
+        float playerDistance = Vector2.Distance(transform.position, target.position);
+        return playerDistance;
     }
 
     

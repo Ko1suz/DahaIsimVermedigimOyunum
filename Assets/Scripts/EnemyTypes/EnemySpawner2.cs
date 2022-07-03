@@ -131,11 +131,14 @@ public class EnemySpawner2 : MonoBehaviour
         state = SpawnState.WAITING;
         yield break;
     }
-
+    
     void SpawnEnemy(Transform _enemy)
     {
         Debug.Log("Düşman oluşturuluyor : "+_enemy);
         Transform _sp = spawnPoints[Random.Range(0,spawnPoints.Length)];
-        Instantiate(_enemy,_sp.position,_sp.rotation);
+        Vector3 newSpawnPoint = new Vector3(_sp.position.x,_sp.position.y,0);
+        Instantiate(_enemy,newSpawnPoint,_sp.rotation);
     }
+
+    
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
+    
     public Sprite[] sprites;
     public Sprite[] DamagedAsteroid;
     public Sprite[] DamagedAsteroid2;
@@ -28,28 +29,29 @@ public class Asteroid : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
     Player player;
-    GameManager gm;
+    public GameManager gm;
+    public Asteroid prefabAsteroid;
     Asteroid asteroid;
     private int RandomSpriteDegeri;
     public Transform playerTransform;
     float distance;
     int secim;
-     int olasılık;
+    int olasılık;
     [SerializeField] private GameObject[] Collectable = new GameObject[2];
     // private 
 
 
     void Awake()
     {
-
-        asteroid = this;
-        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
     }
     // Start is called before the first frame update
     void Start()
     {
+        gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameManager>();
+        asteroid = this;
+
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         _currnetHealth = asteroidMaxHealth;
         int spriteTutucu = Random.Range(0, 4);
@@ -69,17 +71,19 @@ public class Asteroid : MonoBehaviour
     void Update()
     {
         distance = Vector3.Distance(this.gameObject.transform.position, playerTransform.gameObject.transform.position);
-        if (distance > 120)
+        if (distance > 240)
         {
             Destroy(this.gameObject);
+            gm.asteroids.Remove(this.gameObject);
         }
     }
 
     public void SetTrajectory(Vector2 direction)
     {
         rb.AddForce(direction * AsteroidSpeed());
-
         Destroy(this.gameObject, this.maxLifeTime);
+        //gm.asteroids.Remove(this.gameObject);
+        
     }
 
 
@@ -108,38 +112,39 @@ public class Asteroid : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            if (Player.dashStatus)
-            {
-                SetAsteroidHealth(PlayerStatsScript.instance.DashAttackDamage);
-                PlayerStatsScript.instance.SetPlayerEnergy(5);
-            }
-        }
-    }
+    // private void OnTriggerEnter2D(Collider2D collision)
+    // {
+    //     if (collision.gameObject.tag == "Player")
+    //     {
+    //         if (Player.dashStatus)
+    //         {
+    //             SetAsteroidHealth(PlayerStatsScript.instance.DashAttackDamage);
+    //             PlayerStatsScript.instance.SetPlayerEnergy(5);
+    //         }
+    //     }
+    // }
 
-    private void AsteroidSplit()
+    public void AsteroidSplit()
     {
-        if (asteroid.size < .75)
-        {
-            gm.score += gm.scoreIncreas;
-        }
-        else if (asteroid.size < 1)
-        {
-            gm.score += gm.scoreIncreas * 2;
-        }
-        else
-        {
-            gm.score += gm.scoreIncreas * 3;
-        }
+        // if (asteroid.size < .75)
+        // {
+        //     gm.score += gm.scoreIncreas;
+        // }
+        // else if (asteroid.size < 1)
+        // {
+        //     gm.score += gm.scoreIncreas * 2;
+        // }
+        // else
+        // {
+        //     gm.score += gm.scoreIncreas * 3;
+        // }
         asteroidMaxHealth = asteroidMaxHealth / 2;
         // ExplosionEffect.Play();
         if (this.size * 0.5f >= this.minSize)
         {
             CreateSplit();
             CreateSplit();
+            gm.DestroyAsteroid(this);
         }
         else
         {
@@ -148,9 +153,9 @@ public class Asteroid : MonoBehaviour
                 Instantiate(Collectable[secim], transform.position, transform.rotation);
             }
             gm.DestroyAsteroid(this);
-            
+
         }
-       
+
 
     }
 
@@ -158,7 +163,8 @@ public class Asteroid : MonoBehaviour
     {
         Vector2 position = this.transform.position;
         position += Random.insideUnitCircle * 0.5f;
-        Asteroid halfAsteroid = Instantiate(this, position, this.transform.rotation);
+        Asteroid halfAsteroid = Instantiate(prefabAsteroid, position, this.transform.rotation);
+        gm.asteroids.Add(halfAsteroid.gameObject);
         halfAsteroid.size = this.size * 0.5f;
         halfAsteroid.SetTrajectory(Random.insideUnitCircle.normalized * halfAsteroidSpeed);
     }
@@ -200,7 +206,6 @@ public class Asteroid : MonoBehaviour
         if (currnetHealth <= 0)
         {
             AsteroidSplit();
-            Destroy(this.gameObject);
         }
     }
 

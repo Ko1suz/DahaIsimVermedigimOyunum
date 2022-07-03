@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverUIRef;
     public static GameObject scoreUI;
     public GameObject scoreUIRef;
+    public List<GameObject> asteroids = new List<GameObject>();
 
 
     void Awake()
@@ -44,6 +45,46 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void AsteroidCheck()
+    {
+
+        if (/*asteroids == null &&*/ asteroids.Count > 0)
+        {
+
+            for (int i = 0; i < asteroids.Count; i++)
+            {
+                Asteroid asteroid = asteroids[i].GetComponent<Asteroid>();
+                
+                if (asteroid.GetComponent<PolygonCollider2D>().enabled == false || asteroid.GetComponent<Asteroid>().enabled == false)
+                {
+                    asteroid.GetComponent<PolygonCollider2D>().enabled = true;
+                    asteroid.GetComponent<Asteroid>().enabled = true;
+                    Destroy(asteroid.gameObject);
+                }
+                if (asteroid.currnetHealth <= 0)
+                {
+                    asteroid.GetComponent<Asteroid>().enabled = true;
+
+                    Destroy(asteroid.gameObject);
+                    asteroids.Remove(asteroids[i]);
+                }
+
+            }
+        }
+
+    }
+    public void DestroyAsteroid(Asteroid asteroid)
+    {
+        AsteroidExplosionEffect(asteroid.transform, asteroid.size);
+        asteroids.Remove(asteroid.gameObject);
+        Destroy(asteroid.gameObject);
+    }
+
+    private void Update()
+    {
+        AsteroidCheck();
+    }
+
     public static void KillPlayer(Player player)
     {
         gameOverUI.SetActive(true);
@@ -63,11 +104,7 @@ public class GameManager : MonoBehaviour
             PlayerStatsScript.instance.SetPlayerEnergy(25);
         }
     }
-    public void DestroyAsteroid(Asteroid asteroid)
-    {
-        AsteroidExplosionEffect(asteroid.transform, asteroid.size);
-        Destroy(asteroid.gameObject);
-    }
+
 
     public void CollectableHealth(Collectable collectableHealth)
     {
@@ -91,7 +128,7 @@ public class GameManager : MonoBehaviour
         gm.explosion.Play();
     }
     public static void AsteroidExplosionEffect(Transform objectTransform, float size)
-    {   
+    {
         gm.AsteroidExplosion.startSize = size / 5;
         gm.AsteroidExplosion.transform.position = objectTransform.transform.position;
         gm.AsteroidExplosion.Play();
@@ -141,4 +178,6 @@ public class GameManager : MonoBehaviour
     {
         gameOverUI.SetActive(true);
     }
+
+
 }

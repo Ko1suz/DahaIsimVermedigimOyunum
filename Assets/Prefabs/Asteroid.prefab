@@ -283,10 +283,11 @@ MonoBehaviour:
   minSpeed: 10
   maxSpeed: 50
   maxLifeTime: 80
-  halfAsteroidSpeed: 20
+  halfAsteroidSpeed: 2
   asteroidDamage: 1
   asteroiDamagaReduce: 6
   ExplosionEffect: {fileID: 8219085190090160464}
+  prefabAsteroid: {fileID: -1522236326915771526}
   playerTransform: {fileID: 0}
   Collectable:
   - {fileID: 4280861841758766767, guid: 691070df35b7a2b4d956f54adf8557f9, type: 3}

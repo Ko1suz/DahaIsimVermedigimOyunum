@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     private float turnDireaction;
     private Rigidbody2D rb;
     private PolygonCollider2D pcoll2D;
+    private BoxCollider2D boxCollider2D;
     private PlayerStatsScript playerStats;
 
     public HealthUI healthUI;
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         pcoll2D = GetComponent<PolygonCollider2D>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
         playerStats = PlayerStatsScript.instance;
     }
     void Start()
@@ -62,7 +64,34 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // Dash();
+        FaceMouse();
+        if (PlayerStatsScript.instance.currnetEnergy >= 25)
+        {
+            Dash2();
+        }
 
+
+        thrusting = (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow));
+        boosting = Input.GetKey(KeyCode.LeftShift);
+        //if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        //{
+        //    turnDireaction = 1f;
+
+        //}
+        //else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        //{
+        //    turnDireaction = -1f;
+
+        //}
+        //else
+        //{
+        //    turnDireaction = 0;
+        //}
+    }
+
+    void Dash()
+    {
         Vector3 realDirection = firePoint.position - transform.position;
 
         if (direction == 0)
@@ -170,34 +199,60 @@ public class Player : MonoBehaviour
             arrow.SetActive(false);
             arrow2.SetActive(false);
         }
+    }
 
-
-
-
-
-
-        thrusting = (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow));
-        boosting = Input.GetKey(KeyCode.LeftShift);
-        //if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        //{
-        //    turnDireaction = 1f;
-
-        //}
-        //else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        //{
-        //    turnDireaction = -1f;
-
-        //}
-        //else
-        //{
-        //    turnDireaction = 0;
-        //}
-
-        if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.Space))
+    void Dash2()
+    {
+        Vector3 realDirection = firePoint.position - transform.position;
+        FaceMouse();
+        if (Input.GetMouseButtonDown(1))
         {
-            // Shoot();
+            PlayerStatsScript.instance.SetPlayerEnergy(-25);
+        }
+        else if (Input.GetMouseButton(1))
+        {
+            Time.timeScale = 0.00f;
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+            arrow.SetActive(true);
+            arrow2.SetActive(true);
+            dashStatus = true;
+            // Time.timeScale = 1f;
+            // Time.fixedDeltaTime = 0.02f * Time.timeScale;
+            direction = 1;
+            dashStatus = true;
+            pcoll2D.isTrigger = true;
+            // boxCollider2D.enabled = true;
         }
 
+        if (Input.GetMouseButtonUp(1))
+        {
+            if (dashTime <= 0)
+            {
+                direction = 0;
+                dashTime = startDashTime;
+                rb.velocity = Vector2.zero;
+            }
+            else
+            {
+                arrow.SetActive(false);
+                arrow2.SetActive(false);
+                dashTime -= Time.deltaTime;
+                Time.timeScale = 1f;
+                Time.fixedDeltaTime = 0.02f * Time.timeScale;
+                rb.velocity = realDirection * dashSpeed * Time.fixedDeltaTime * 100;
+                StartCoroutine(TriggerCloser());
+                
+            }
+        }
+    }
+
+    IEnumerator TriggerCloser()
+    {
+        yield return new WaitForSecondsRealtime(0.1f);
+        dashStatus = false;
+        pcoll2D.isTrigger = false;
+        // boxCollider2D.enabled = false;
+        rb.velocity = Vector2.zero;
     }
 
     private void FaceMouse()
@@ -216,7 +271,7 @@ public class Player : MonoBehaviour
         boostWait = false;
     }
 
-    public float countDown =0;
+    public float countDown = 0;
     public void brustCountDown()
     {
         countDown += Time.deltaTime * 1;
@@ -224,6 +279,14 @@ public class Player : MonoBehaviour
     }
 
     void FixedUpdate()
+    {
+        BoostWait();
+
+        Moving();
+
+    }
+
+    private void BoostWait()
     {
         if (PlayerStatsScript.instance.currnetEnergy <= 0)
         {
@@ -239,8 +302,10 @@ public class Player : MonoBehaviour
             countDown = 0;
             littleEnergyBar.SetRefillEnergyUI(countDown);
         }
-        
+    }
 
+    private void Moving()
+    {
         if (boosting)
         {
             if (!boostWait)
@@ -280,12 +345,8 @@ public class Player : MonoBehaviour
             PlayerStatsScript.instance.SetPlayerEnergy(+1 * Time.deltaTime);
             //    brustEffect.Stop();
         }
-
-        //if (turnDireaction != 0f)
-        //{
-        //    rb.AddTorque(turnDireaction*playerStats.turnSpeed);
-        //}
     }
+
     // public void Shoot()
     // {
     //     Bullet bullet = Instantiate(this.bulletPrefab, firePoint.transform.position, this.transform.rotation);
@@ -316,6 +377,17 @@ public class Player : MonoBehaviour
         else if (other.gameObject.tag == "Enemy")
         {
             SetPlayerHealth(other.gameObject.GetComponent<EnemyStats>().attackDamage);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.tag == "Asteroid")
+        {
+            other.gameObject.GetComponent<Asteroid>().AsteroidSplit();
+        }
+        else if (other.gameObject.tag == "Enemy")
+        {
+            other.gameObject.GetComponent<EnemyStats>().SetEnemyHealth(PlayerStatsScript.instance.DashAttackDamage);
         }
     }
 
